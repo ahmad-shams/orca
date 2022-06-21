@@ -3,6 +3,8 @@
 #   strategy = "cluster"
 # }
 
+
+
 # resource "aws_autoscaling_group" "bar" {
 #   name                      = "foobar3-terraform-test"
 #   max_size                  = 5

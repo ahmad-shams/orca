@@ -80,7 +80,7 @@ jobs:
         if: contains(steps.changed-files.outputs.modified_files, '${{ env.tf_working_dir }}')
         id: plan
         working-directory: ${{ env.tf_working_dir}}
-        run: terraform plan
+        run: terraform plan -input=false
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
@@ -90,7 +90,7 @@ jobs:
         if: contains(steps.changed-files.outputs.modified_files, '${{ env.tf_working_dir }}') && github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: apply
         working-directory: ${{ env.tf_working_dir}}
-        run: terraform apply
+        run: terraform apply -input=false -auto-approve
 
       - name: Build Docker
         if: contains(steps.changed-files.outputs.modified_files, '${{ env.python_working_dir }}')
