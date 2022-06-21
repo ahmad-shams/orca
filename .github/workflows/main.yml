@@ -99,4 +99,5 @@ jobs:
         run: |
           docker image build -t orca_python_docker:latest .
           aws ecr get-login-password --region ${{secrets.AWS_REGION}} | docker login --username AWS --password-stdin ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com
-          docker tag orca_python_docker:latest 565105851053.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com/orca_python_docker:latest
+          docker tag orca_python_docker:latest ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com/orca_python_docker:latest
+          docker push ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com/orca_python_docker:latest
