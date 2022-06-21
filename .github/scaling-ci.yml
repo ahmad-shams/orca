@@ -1,0 +1,68 @@
+name: 'scaling flow'
+
+on:
+  push:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/operations-ci.yml'
+
+
+env:
+  tf_version: '1.2.3'
+  tf_working_dir_operations: 'terraform'
+jobs:
+  auto_scaling:
+    name: 'auto_scaling'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: write
+      packages: write
+      pages: write
+      pull-requests: write
+      repository-projects: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install hclq
+      run: |
+        curl -sSLo install.sh https://install.hclq.sh
+        sh install.sh
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        aws-region: ${{secrets.AWS_REGION}}
+
+    - name: Setup Terraform 1.2.3
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.2.3
+        terraform_wrapper: false
+
+    - name: Setup Terraform version
+      run: terraform -v
+
+    - name: Setup Terraform wrapper path
+      run: which terraform
+
+
+    # - name: Terraform Format
+    #   id: fmt
+    #   working-directory: ${{ env.terraform }}
+    #   run: Terraform run-all validate
+
+    - name: Terraform init
+      id: init
+      working-directory: ${{ env.terraform}}
+      run: Terraform run-all init
+

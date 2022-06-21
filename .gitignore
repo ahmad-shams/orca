@@ -1,0 +1,8 @@
+**/.terraform
+**/.terraform.lock.hcl
+/.idea/
+/migrations/
+**/*.pdf
+
+
+/Orca_Security-_DevOps_Exercise.pdf
