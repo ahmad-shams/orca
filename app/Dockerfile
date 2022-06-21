@@ -5,9 +5,7 @@ RUN apk --update add postgresql-client
 
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
-RUN pip3 install -r requirements.txt
-
+RUN pipenv install
 COPY . /app
 
 CMD [ "run_app.sh"]
