@@ -6,20 +6,21 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 env:
-  tf_version: '1.2.3'
-  tf_working_dir: 'terraform'
+  tf_version: "1.2.3"
+  tf_working_dir: "terraform"
+  python_working_dir: "app"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  terraform:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
@@ -36,6 +37,8 @@ jobs:
       repository-projects: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TF_VAR_region: ${{secrets.AWS_REGION}}
+      TF_VAR_DATABASE_URL: ${{secrets.DATABASE_URL}}
 
     steps:
       - name: Checkout
@@ -64,6 +67,7 @@ jobs:
         run: which terraform
 
       - name: Terraform init
+        if: contains(steps.changed-files.outputs.modified_files, '${{ env.tf_working_dir }}')
         id: init
         working-directory: ${{ env.tf_working_dir}}
         run: terraform init
@@ -73,6 +77,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Plan
+        if: contains(steps.changed-files.outputs.modified_files, '${{ env.tf_working_dir }}')
         id: plan
         working-directory: ${{ env.tf_working_dir}}
         run: terraform plan
@@ -82,9 +87,13 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: contains(steps.changed-files.outputs.modified_files, '${{ env.tf_working_dir }}') && github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: apply
         working-directory: ${{ env.tf_working_dir}}
         run: terraform apply
 
-
+      - name: Build Docker
+        if: contains(steps.changed-files.outputs.modified_files, '${{ env.tf_working_dir }}') && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: apply
+        working-directory: ${{ env.tf_working_dir}}
+        run: terraform apply
