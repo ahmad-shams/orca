@@ -66,7 +66,7 @@ jobs:
       - name: Terraform init
         id: init
         working-directory: ${{ env.tf_working_dir}}
-        run: Terraform run-all init
+        run: terraform init
 
 
 
