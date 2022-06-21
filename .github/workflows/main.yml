@@ -97,4 +97,6 @@ jobs:
         id: docker-build
         working-directory: ${{ env.python_working_dir}}
         run: |
-          docker image build -t flask_docker .
+          docker image build -t orca_python_docker:latest .
+          aws ecr get-login-password --region ${{secrets.AWS_REGION}} | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.region.amazonaws.com
+          docker tag orca_python_docker:latest 565105851053.dkr.ecr.${{secrets.AWS_REGION}}.amazonaws.com/orca_python_docker:latest
