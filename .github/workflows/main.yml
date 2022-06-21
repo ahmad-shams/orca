@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 env:
   tf_version: '1.2.3'
-  tf_working_dir_operations: 'terraform'
+  tf_working_dir: 'terraform'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,8 +47,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{secrets.AUTOMATION_AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AUTOMATION_AWS_SECRET_ACCESS_KEY}}
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           aws-region: ${{secrets.AWS_REGION}}
 
       - name: Setup Terraform 1.2.3
@@ -65,7 +65,7 @@ jobs:
 
       - name: Terraform init
         id: init
-        working-directory: ${{ env.terraform}}
+        working-directory: ${{ env.tf_working_dir}}
         run: Terraform run-all init
 
 
