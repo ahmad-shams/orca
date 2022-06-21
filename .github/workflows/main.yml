@@ -12,6 +12,9 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+env:
+  tf_version: '1.2.3'
+  tf_working_dir_operations: 'terraform'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,18 +22,51 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: write
+      packages: write
+      pages: write
+      pull-requests: write
+      repository-projects: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install hclq
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          curl -sSLo install.sh https://install.hclq.sh
+          sh install.sh
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AUTOMATION_AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AUTOMATION_AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Setup Terraform 1.2.3
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.2.3
+          terraform_wrapper: false
+
+      - name: Setup Terraform version
+        run: terraform -v
+
+      - name: Setup Terraform wrapper path
+        run: which terraform
+
+      - name: Terraform init
+        id: init
+        working-directory: ${{ env.terraform}}
+        run: Terraform run-all init
+
+
+
