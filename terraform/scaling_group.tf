@@ -27,6 +27,9 @@ resource "aws_autoscaling_group" "mygroup" {
   vpc_zone_identifier  = module.vpc.private_subnets
   target_group_arns    = module.alb.target_group_arns
   # availability_zones   = module.vpc.azs
+  depends_on = [
+    aws_launch_configuration.as_conf
+  ]
 }
 
 
