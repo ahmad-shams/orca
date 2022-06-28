@@ -15,22 +15,22 @@ resource "aws_placement_group" "this" {
 }
 
 
-resource "aws_autoscaling_group" "mygroup" {
-  name                      = "auto-scaling-orca-web"
-  max_size                  = 3
-  min_size                  = 1
-  health_check_grace_period = 30
-  health_check_type         = "EC2"
-  desired_capacity          = 2
-  force_delete         = true
-  launch_configuration = aws_launch_configuration.as_conf.name
-  vpc_zone_identifier  = module.vpc.private_subnets
-  target_group_arns    = module.alb.target_group_arns
-  # availability_zones   = module.vpc.azs
-  depends_on = [
-    aws_launch_configuration.as_conf
-  ]
-}
+# resource "aws_autoscaling_group" "mygroup" {
+#   name                      = "auto-scaling-orca-web"
+#   max_size                  = 3
+#   min_size                  = 1
+#   health_check_grace_period = 30
+#   health_check_type         = "EC2"
+#   desired_capacity          = 2
+#   force_delete         = true
+#   launch_configuration = aws_launch_configuration.as_conf.name
+#   vpc_zone_identifier  = module.vpc.private_subnets
+#   target_group_arns    = module.alb.target_group_arns
+#   # availability_zones   = module.vpc.azs
+#   depends_on = [
+#     aws_launch_configuration.as_conf
+#   ]
+# }
 
 
 # Creating the autoscaling policy of the autoscaling group
