@@ -33,14 +33,14 @@ resource "aws_placement_group" "this" {
 # }
 
 
-# Creating the autoscaling policy of the autoscaling group
-resource "aws_autoscaling_policy" "mygroup_policy" {
-  name                   = "autoscalegroup_policy"
-  scaling_adjustment     = 2
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = aws_autoscaling_group.mygroup.name
-}
+# # Creating the autoscaling policy of the autoscaling group
+# resource "aws_autoscaling_policy" "mygroup_policy" {
+#   name                   = "autoscalegroup_policy"
+#   scaling_adjustment     = 2
+#   adjustment_type        = "ChangeInCapacity"
+#   cooldown               = 300
+#   autoscaling_group_name = aws_autoscaling_group.mygroup.name
+# }
 
 resource "aws_iam_instance_profile" "asg" {
   name = "asg"
