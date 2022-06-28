@@ -65,8 +65,8 @@ module "vpc" {
 
 
 module "vpc-endpoints" {
-  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "3.14.2"
+  source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version            = "3.14.2"
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [module.security_group.security_group_id]
 
@@ -158,21 +158,34 @@ module "vpc-endpoints" {
 
 
 data "aws_iam_policy_document" "generic_endpoint_policy" {
-  statement {
-    effect    = "Deny"
-    actions   = ["*"]
-    resources = ["*"]
+  # statement {
+  #   effect    = "Deny"
+  #   actions   = ["*"]
+  #   resources = ["*"]
 
+  #   principals {
+  #     type        = "*"
+  #     identifiers = ["*"]
+  #   }
+
+  #   condition {
+  #     test     = "StringNotEquals"
+  #     variable = "aws:SourceVpc"
+
+  #     values = [module.vpc.vpc_id]
+  #   }
+  # }
+  statement {
+
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
     principals {
       type        = "*"
       identifiers = ["*"]
     }
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:SourceVpc"
-
-      values = [module.vpc.vpc_id]
-    }
+    resources = ["*"]
   }
+
 }
