@@ -39,7 +39,6 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_VAR_region: ${{secrets.AWS_REGION}}
       TF_VAR_DATABASE_URL: ${{secrets.DATABASE_URL}}
-      TF_VAR_DOCKER_PASS: ${{aws ecr get-login-password --region ${{secrets.AWS_REGION}}}}
 
     steps:
       - name: Checkout
