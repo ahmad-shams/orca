@@ -179,7 +179,8 @@ data "aws_iam_policy_document" "generic_endpoint_policy" {
 
     effect = "Allow"
     actions = [
-      "ecr:GetAuthorizationToken"
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchGetImage"
     ]
     principals {
       type        = "*"
