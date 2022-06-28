@@ -9,4 +9,4 @@ RUN pip install pipenv
 RUN pipenv install
 COPY . /app
 
-CMD [ "run_app.sh"]
+CMD [ "/app/run_app.sh"]
