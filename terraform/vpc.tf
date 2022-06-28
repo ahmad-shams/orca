@@ -180,7 +180,8 @@ data "aws_iam_policy_document" "generic_endpoint_policy" {
     effect = "Allow"
     actions = [
       "ecr:GetAuthorizationToken",
-      "ecr:BatchGetImage"
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer"
     ]
     principals {
       type        = "*"
